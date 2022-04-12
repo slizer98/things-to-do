@@ -18,6 +18,12 @@ class Tareas {
         this._listado = {};
     }
 
+    borrarTarea(id = ''){
+        if(this._listado[id]){
+            delete this._listado[id];
+        } 
+    }
+
     cargarTareasFromArr(tareas = []){
         tareas.forEach(tarea => {
             this._listado[tarea.id] = tarea;  
@@ -41,6 +47,25 @@ class Tareas {
             console.log(`${colors.green(i)}. ${desc} :: ${completadoEn ? colors.green('Completado') : colors.red('Pendiente')}`);
         })
     }
-}
 
+    listadoCompletadasPendientes(completadas = true){
+         // recuperar todas las tareas
+         const tareas = this.listadoArr;
+         // imprimir el listado
+         let cont1 = 1, cont2 = 1;
+         tareas.forEach(tarea => {
+             const {desc, completadoEn} = tarea;
+             if(completadas){
+                if(completadoEn){
+                    console.log(`${colors.green(cont1)}. ${desc} :: ${'completado:'.green} ${colors.green(completadoEn)}`);
+                    cont1 += 1;
+                }
+             }
+            else if(!completadoEn ){
+                console.log(`${colors.green(cont2)}. ${desc} :: ${'pendiente'.red}`);
+                cont2 += 1;
+            }
+         })
+    }
+}
 module.exports = Tareas;

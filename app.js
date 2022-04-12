@@ -3,7 +3,10 @@ const { guardaDB, leerDB } = require('./helpers/guardarArchivo');
 const { 
     inquirerMenu, 
     pausa, 
-    leerInput 
+    leerInput,
+    leerInputNumber,
+    listadoTareasBorrar,
+    confirmar
 } = require('./helpers/inquirer');
 const Tareas = require('./models/tareas');
 
@@ -29,12 +32,32 @@ const main = async() => {
                 // crear opcion
                 const desc = await leerInput('Descripcion:');
                 tareas.crearTarea(desc);
-            break;
+                break;
 
             case '2':
                 tareas.listadoCompleto();
-
-            break;
+                break;
+            
+            case '3': //Listar completadas
+                tareas.listadoCompletadasPendientes(true);
+                break;
+            
+            case '4': //Listar pendientes
+                tareas.listadoCompletadasPendientes(false);
+                break;
+            case '5': //Completar tarea
+                
+                break;
+            case '6': //Borrar tarea
+                const id = await listadoTareasBorrar(tareas.listadoArr);
+                const ok = await confirmar('Esta seguro de borrar la tarea?');
+                if(ok){
+                    tareas.borrarTarea(id);
+                    console.log('\nTarea borrada correctamente...'.green);
+                } else {
+                    console.log('Cancelado...'.red);
+                }
+                break;
         }
 
         guardaDB(tareas.listadoArr);
